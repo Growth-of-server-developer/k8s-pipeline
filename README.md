@@ -3,7 +3,7 @@ Experience CI/CD pipeline with kubernetes
 
 - CI 
   - Jenkins 
-    - Loacal Host + Docker + ngrok 
+    - Loacal Host + Docker + ngrok   
      problem: different URL whenever restarting -> It's annoying to register github webhook every time.
     - Google Cloud + Kubernetes
  
