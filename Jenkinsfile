@@ -1,8 +1,8 @@
 pipeline {
-    agnet any 
+    agent any 
     tools {
         maven 'Maven3.6.3'
-        docker 'docker-latest'
+        dockerTool 'docker-latest'
      }
     stages {
         stage('Test maven installation') {
@@ -21,14 +21,8 @@ pipeline {
 node {
      def app
 
-     tools {
-        maven 'Maven3.6.3'
-        docker 'docker-latest'
-     }
-
      stage('Clone repository') {
          /* Let's make sure we have the repository cloned to our workspace */
-
          checkout scm
      }
 
