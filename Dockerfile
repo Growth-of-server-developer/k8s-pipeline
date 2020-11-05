@@ -14,7 +14,9 @@ RUN mvn clean install
 
 # 2. Use the build artifact and then remove the build-container
 FROM openjdk:11-jdk
- 
+
+EXPOSE 8090
+
 MAINTAINER Doyun Geum
  
 VOLUME /tmp
