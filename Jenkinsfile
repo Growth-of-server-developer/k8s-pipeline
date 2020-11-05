@@ -1,52 +1,45 @@
-pipeline {
-    agent any 
-    tools {
-        maven 'Maven3.6.3'
-        dockerTool 'docker-latest'
-     }
-    stages {
-        stage('Test maven installation') {
-            steps {
-              sh 'mvn -version' 
+podTemplate(
+    label: 'buildPod',
+    volumes: [
+        emptyDirVolume(mountPath: '/etc/gitrepo', memory: false),
+        hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
+    ],
+    containers:
+    [
+        containerTemplate(name: 'git', image: 'alpine/git', command: 'cat', ttyEnabled: true),
+        containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true,)
+    ]
+)
+{
+    node('buildPod') {
+
+        def app
+        
+        stage('Clone repository') {
+            container('git') {
+                sh 'git clone -b develop https://github.com/Growth-of-server-developer/k8s-pipeline.git /etc/gitrepo'
             }
         }
-        stage('Test Docker installation') {
-            steps {
-              sh 'docker --version'
+        stage('Test source codes') {
+           sh 'echo Test passed' 
+        }
+        stage('Build image'){
+            container('docker') {
+                app = docker.build("doyunii/mybox", "/etc/gitrepo")
+            }
+        }
+
+        stage('Test image') {
+            sh 'echo Test passed'
+        }
+
+        stage('Push image') {
+            container('docker') {
+                docker.withRegistry('', 'docker-hub') {
+                    app.push("${env.BUILD_NUMBER}")
+                    app.push()
+                }
             }
         }
     }
 }
-
-node {
-     def app
-
-     stage('Clone repository') {
-         /* Let's make sure we have the repository cloned to our workspace */
-         checkout scm
-     }
-
-     stage('Build image') {
-         /* This builds the actual image; synonymous to
-         * docker build on the command line */
-
-         app = docker.build("doyunii/mybox")
-     }
-
-     stage('Test image') {
-         app.inside {
-             sh 'echo "Tests passed"'
-         }
-     }
-
-     stage('Push image') {
-         /* Finally, we'll push the image with two tags:
-         * First, the incremental build number from Jenkins
-         * Second, the 'latest' tag.
-         * Pushing multiple tags is cheap, as all the layers are reused. */
-         docker.withRegistry('https://regstry.hub.docker.com', 'docker-hub') {
-             app.push("${env.BUILD_NUMBER}")
-             app.push("latest")
-         }
-     }
- }
