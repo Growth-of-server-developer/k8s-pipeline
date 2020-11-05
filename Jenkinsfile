@@ -1,3 +1,23 @@
+pipeline {
+    agnet any 
+    tools {
+        maven 'Maven3.6.3'
+        docker 'docker-latest'
+     }
+    stages {
+        stage('Test maven installation') {
+            steps {
+              sh 'mvn -version' 
+            }
+        }
+        stage('Test Docker installation') {
+            steps {
+              sh 'docker --version'
+            }
+        }
+    }
+}
+
 node {
      def app
 
