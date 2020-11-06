@@ -34,4 +34,7 @@ jobs:
       -
         name: Available platforms
         run: echo ${{ steps.buildx.outputs.platforms }}
+      -
+         name: Build Image
+         run: docker build -t doyunii/mybox
       
