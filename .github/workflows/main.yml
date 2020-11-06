@@ -20,18 +20,24 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-        
-      - uses: actions/github-script@v3
-        name: commenting
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: "Start docker image build testing... 👏"
-            }) 
+      - uses: actions/checkout@v1
+      - name: Add build start comment
+        run: |
+          export msg="Start docker image build testing... 👏"
+          jq -nc '{"body":env.msg}' | \
+          curl -sL  -X POST -d @- \
+            -H "Content-Type: application/json" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/comments"   
+            
       - name: Build the docker image
         run: docker build . -t doyunii/mybox 
+        
+      - name: Add build complete comment
+        run: |
+          export msg="Complete docker image build 👌"
+          jq -nc '{"body":env.msg}' | \
+          curl -sL  -X POST -d @- \
+            -H "Content-Type: application/json" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/comments" 
