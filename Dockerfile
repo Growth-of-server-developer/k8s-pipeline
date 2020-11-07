@@ -10,7 +10,7 @@ WORKDIR /app
 RUN ls -l
  
 # Run Maven build
-RUN mvn clean install
+RUN mvn clean install -DskipTests=true
 
 # 2. Use the build artifact and then remove the build-container
 FROM openjdk:11-jdk
