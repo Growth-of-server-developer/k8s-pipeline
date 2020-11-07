@@ -1,17 +1,52 @@
-podTemplate(
-    label: 'buildPod',
-    volumes: [
-        emptyDirVolume(mountPath: '/etc/gitrepo', memory: false),
-        hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
-    ],
-    containers:
-    [
-        containerTemplate(name: 'git', image: 'alpine/git', command: 'cat', ttyEnabled: true),
-        containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true,)
-    ]
-)
+podTemplate(yaml: """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: git
+    image: alpine/git
+    command: ['cat']
+    tty: true
+    volumeMounts:
+    - name: repo-volume
+      mountPath: /etc/gitrepo
+  - name: docker
+    image: docker
+    command: ['cat']
+    tty: true
+    volumeMounts:
+    - name: docker-volume
+      mountPath: /var/run/docker.sock
+    env: 
+      - name: DB_HOST
+        valueFrom:
+          configMapKeyRef:
+            name: db-config
+            key: host
+      - name: DB_NAME
+        valueFrom:
+          configMapKeyRef:
+            name: db-config
+            key: name
+      - name: DB_USER
+        valueFrom:
+          configMapKeyRef:
+            name: db-config
+            key: user
+      - name: DB_PASSWORD
+        valueFrom:
+          configMapKeyRef:
+            name: db-config
+            key: password
+  volumes:
+  - name: repo-volume
+    emptyDir: {}
+  - name: docker-volume
+    hostPath:
+      path: /var/run/docker.sock
+""")
 {
-    node('buildPod') {
+    node(POD_LABEL) {
 
         def app
         
@@ -21,7 +56,7 @@ podTemplate(
             }
         }
         stage('Test source codes') {
-           sh 'echo Test passed' 
+            
         }
         stage('Build image'){
             container('docker') {
@@ -32,7 +67,6 @@ podTemplate(
         stage('Test image') {
             sh 'echo Test passed'
         }
-
         stage('Push image') {
             container('docker') {
                 docker.withRegistry('', 'docker-hub') {
