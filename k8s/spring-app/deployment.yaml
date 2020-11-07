@@ -1,43 +1,58 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
-  labels:
-    app: demo
-  name: demo
+  name: covid-demo
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: demo
-  strategy: {}
+      app: covid-demo
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        app: demo
+        app: covid-demo
     spec:
       containers:
-      - image: springguides/demo
-        name: demo
-        resources: {}
-status: {}
----
-apiVersion: v1
-kind: Service
-metadata:
-  creationTimestamp: null
-  labels:
-    app: demo
-  name: demo
-spec:
-  ports:
-  - name: 8080-8080
-    port: 8080
-    protocol: TCP
-    targetPort: 8080
-  selector:
-    app: demo
-  type: ClusterIP
-status:
-  loadBalancer: {}
+      - name: covid-demo
+        image: doyunii/mybox
+        imagePullPolicy: Always
+        ports:
+          - name: http
+            containerPort: 8090
+        env: 
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: host
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: name
+        - name: DB_USER
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: user
+        - name: DB_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: password
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8090
+          initialDelaySeconds: 60
+          timeoutSeconds: 15
+          periodSeconds: 60
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8090
+          initialDelaySeconds: 30
+          timeoutSeconds: 2
+          periodSeconds: 30
+          failureThreshold: 3
