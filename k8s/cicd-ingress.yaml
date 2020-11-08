@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: cicd-ing
+  namespace: jenkins
+spec:
+  rules:
+  - host: doyuni-devops.duckdns.org
+    http:
+      paths:
+      - backend:
+          serviceName: jenkins
+          servicePort: 8080
+        path: /jenkins
+      - backend:
+          serviceName: grafana
+          servicePort: 3000
+        path: /apm
+  - host: doyuni.duckdns.org
+    http:
+      paths:
+      - backend:
+          serviceName: covid-service
+          servicePort: 8090
+        path: /
+status:
+  loadBalancer:
+    ingress:
+    - ip: 35.232.34.42
