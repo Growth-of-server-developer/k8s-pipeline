@@ -1,5 +1,5 @@
-[![Build Status](http://doyuni-devops.duckdns.org/jenkins/job/demo/badge/icon)](http://doyuni-devops.duckdns.org/jenkins/job/demo). 
-[![App Status](http://doyuni-argo.duckdns.org/api/badge?name=covid-demo&revision=true)](http://doyuni-argo.duckdns.org/applications/covid-demo)
+[![Build Status](http://doyuni-devops.duckdns.org/jenkins/job/demo/badge/icon)](http://doyuni-devops.duckdns.org/jenkins/job/demo)
+[![App Status](https://doyuni-argo.duckdns.org/api/badge?name=covid-demo&revision=true)](https://doyuni-argo.duckdns.org/applications/covid-demo)
 # k8s-pipeline
 Experience CI/CD pipeline with kubernetes 
 
