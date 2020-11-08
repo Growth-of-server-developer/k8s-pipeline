@@ -1,3 +1,5 @@
+[![Build Status](http://jenkins:8080/jenkins/job/demo/badge/icon)](http://jenkins:8080/jenkins/job/demo/)
+[![App Status](https://doyuni-argo.duckdns.org/api/badge?name=covid-demo&revision=true)](https://doyuni-argo.duckdns.org/applications/covid-demo)
 # k8s-pipeline
 Experience CI/CD pipeline with kubernetes 
 
