@@ -4,19 +4,31 @@ kind: Pod
 spec:
   containers:
   - name: git
+    namespace: jenkins
     image: alpine/git
     command: ['cat']
     tty: true
     volumeMounts:
     - name: repo-volume
       mountPath: /etc/gitrepo
+  - name: argocd-tools
+    namespace: argocd
+    image: argoproj/argo-cd-tools:latest
+    command: ['cat']
+    tty: true
+    env:
+     - name: ARGOCD_SERVER
+       value: doyuni-argo.duckdns.org
   - name: docker
+    namespace: jenkins
     image: docker
     command: ['cat']
     tty: true
     volumeMounts:
     - name: docker-volume
       mountPath: /var/run/docker.sock
+    - name: repo-volume
+      mountPath: /etc/gitrepo
     env: 
       - name: DB_HOST
         valueFrom:

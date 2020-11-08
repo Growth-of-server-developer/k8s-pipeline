@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-config
+  namespace: jenkins
+data:
+  host: db-mysql.jenkins.svc.cluster.local
+  name: covid_db
+  user: test
+  password: test
