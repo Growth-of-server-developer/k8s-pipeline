@@ -31,15 +31,19 @@ Experience CI/CD pipeline with kubernetes
        - Test Report 
          - virtual user: 99      
     <img width="1356" alt="ngrinder" src="https://user-images.githubusercontent.com/46062199/98464735-1efe5800-2208-11eb-8ca4-b6fa84861578.png">     
-           virtual user: 1000
-    <img width="1359" alt="ngrinder-test" src="https://user-images.githubusercontent.com/46062199/98464745-2de50a80-2208-11eb-9c98-713e4ee08dcd.png">
+
+- virtual user: 1000 (default: DB maxconnection = 151, wait_timeout = 28800)
+ <img width="1359" alt="ngrinder-test" src="https://user-images.githubusercontent.com/46062199/98464745-2de50a80-2208-11eb-9c98-713e4ee08dcd.png">    
+          
+- virtual user: 1000 (Modify: DB maxconnection = 500, wait_timeout = 60)      
+ <img width="1281" alt="n1" src="https://user-images.githubusercontent.com/46062199/98465539-f462ce00-220c-11eb-85dc-1031e77b96ad.png">     
     
-    - JBoss & Gatling
     
 - APM
   - Grafana(Visualizing) & Prometheus
     - k8s monitoring
   <img width="1269" alt="Grafana" src="https://user-images.githubusercontent.com/46062199/98458457-3e7b8d80-21d4-11eb-9e54-13addd309dcc.png">
+            
     - Monitoring during testing with nGrinder
-  <img width="1717" alt="grafana1" src="https://user-images.githubusercontent.com/46062199/98458458-43404180-21d4-11eb-9f6d-3771aa0e08d2.png">
-  <img width="1726" alt="grafana2" src="https://user-images.githubusercontent.com/46062199/98458459-450a0500-21d4-11eb-8cf2-db58a614c8aa.png">
+<img width="1165" alt="스크린샷 2020-11-08 오후 9 53 06" src="https://user-images.githubusercontent.com/46062199/98465597-51f71a80-220d-11eb-9166-f99c9a71b7f3.png">
+<img width="1174" alt="스크린샷 2020-11-08 오후 9 53 13" src="https://user-images.githubusercontent.com/46062199/98465598-53284780-220d-11eb-89dc-ed35d9e6f40b.png">
